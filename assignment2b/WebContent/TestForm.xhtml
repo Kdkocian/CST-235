@@ -4,9 +4,11 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"> 
 
-<h:head><title>JSF Form Page</title></h:head> 
-<body> 
-	<h:form id = "user-form">
+ 
+<ui:composition template= "layouts/commonLayout.xhtml">
+	<ui:define name= "title"> JSF Form Page</ui:define>
+	<ui:define name= "content">
+	<h:form id = "user-form"> <br/>
 		<h:outputLabel for="FirstName"> First Name</h:outputLabel>
 			<h:inputText id= "firstName" value= "#{user.firstName}" required = "True" requiredMessage= "Enter your name"/> <br />
 			<br />
@@ -15,8 +17,10 @@
 			<h:inputText id= "lastName" value= "#{user.lastName}" required = "True" requiredMessage= "Enter your last name"/> <br />
 			<br />
 		<br />
-			<h:commandButton value="Submit" action="#{FormController.onSubmit(user)}"></h:commandButton>
-			<h:commandButton value="Flash" action="#{FormController.onFlash(user)}"></h:commandButton>	
+			<h:commandButton value="Submit" action="#{formController.onSubmit(user)}"></h:commandButton>
+			<h:commandButton value="Flash" action="#{formController.onFlash(user)}"></h:commandButton>	
 		</h:form>
-</body> 
+		<h:messages/>
+	</ui:define>
+</ui:composition> 
 </html>

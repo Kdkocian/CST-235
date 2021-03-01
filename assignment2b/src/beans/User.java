@@ -2,17 +2,22 @@ package beans;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 
 @ManagedBean
 @ViewScoped
 public class User {
-
-	String firstName = "";
-	String lastName = "";
+	@NotNull()
+		@Size(min=2, max=15)
+			String firstName;
+	@NotNull()
+		@Size(min=2, max=15)
+			String lastName;
+	
 	public User() {
-		super();
-		this.firstName = "Kyle";
-		this.lastName = "Kocian";
+	
 	}
 	
 	public String getFirstName() {

@@ -1,25 +1,34 @@
 package controllers;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import beans.User;
 
-@ManagedBean
+@ManagedBean(name = "formController", eager = true)
 @ViewScoped
 
 public class FormController {
-	String firstName;
-	String lastName;
+	@ManagedProperty(value = "#{user}")
+	public User user;
 	
-	String onSubmit(User user) {
-		firstName = user.getFirstName();
-		lastName = user.getLastName();
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String onSubmit(User user) {
+		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("user", user);
 		return "TestResponse.xhtml";
 	}
 	
-	/*String onFlash(User user) {
-		user = theFlash;
-		return "TestResponse.xhtml?faces-redirect=true";*/
+	public String onFlash(User user) {
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().put("user", user);
+		return "TestResponse.xhtml?faces-redirect=true";
 	}
 }
