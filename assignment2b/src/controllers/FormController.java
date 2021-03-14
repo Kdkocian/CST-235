@@ -1,27 +1,25 @@
 package controllers;
 
-import javax.ejb.EJB;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 import beans.User;
-import business.MyTimerService;
-import business.OrdersBusinessInterFace;
 
 @ManagedBean(name = "formController", eager = true)
 @ViewScoped
 
 public class FormController {
 	@ManagedProperty(value = "#{user}")
-	
 	public User user;
-	@Inject
-	OrdersBusinessInterFace service;
-	@EJB
-	MyTimerService timer;
 	
 	public User getUser() {
 		return user;
@@ -33,8 +31,9 @@ public class FormController {
 
 	public String onSubmit(User user) {
 		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("user", user);
-		service.test();
-		timer.setTimer(10000);
+		getAllOrders();
+		insertOrder();
+		getAllOrders();
 		return "TestResponse.xhtml";
 	}
 	
@@ -43,7 +42,50 @@ public class FormController {
 		return "TestResponse.xhtml?faces-redirect=true";
 	}
 	
-	public OrdersBusinessInterFace getService() {
-		return service;
+	private void getAllOrders() {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testapp", "kyle", "bubbles");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM testapp.Orders");
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				System.out.println(String.format("ID: %d   Product: %s    Price: %f", rs.getInt("ID"), rs.getString("PRODUCT_NAME"), rs.getFloat("PRICE")));
+			} 
+			rs.close();
+			System.out.println("Success!!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Failure!!");
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch(Exception ex) {
+					
+				}
+			}
+		}
+	}
+	private void insertOrder() {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testapp", "kyle", "bubbles");
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("INSERT INTO testapp.Orders(ORDER_NO, PRODUCT_NAME, PRICE, QUANTITY) VALUES('00000000011', 'This is Product 11', 11.00, 11);");
+			System.out.println("Success!!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Failure!!");
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch(Exception ex) {
+					
+				}
+			}
+		}
 	}
 }

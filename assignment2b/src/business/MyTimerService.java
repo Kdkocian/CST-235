@@ -36,7 +36,7 @@ public class MyTimerService {
     
     
 	@SuppressWarnings("unused")
-	@Schedule(second="*/10", minute="*", hour="0-23", dayOfWeek="Mon-Fri",
+	@Schedule(second="0", minute="*", hour="0-23", dayOfWeek="Mon-Fri",
       dayOfMonth="*", month="*", year="*", info="MyTimer")
     private void scheduledTimeout(final Timer t) {
         logger.info("@Schedule called at: " + new java.util.Date());
