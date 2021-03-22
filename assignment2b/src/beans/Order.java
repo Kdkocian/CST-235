@@ -1,5 +1,11 @@
 package beans;
 
+import javax.enterprise.inject.Produces;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "Order")
 public class Order {
 
 	String orderNumber;
@@ -40,6 +46,7 @@ public class Order {
 	public void setPropertyQuantity(int propertyQuantity) {
 		this.propertyQuantity = propertyQuantity;
 	}
+	
 
 	public Order(String orderNumber, String productName, Float priceProperty, int propertyQuantity) {
 		super();
@@ -47,6 +54,10 @@ public class Order {
 		this.productName = productName;
 		this.priceProperty = priceProperty;
 		this.propertyQuantity = propertyQuantity;
+	}
+
+	public Order() {
+		super();
 	}
 	
 }

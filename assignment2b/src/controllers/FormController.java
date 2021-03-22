@@ -12,12 +12,15 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import beans.Order;
 import beans.User;
+import business.OrdersBusinessService;
 
 @ManagedBean(name = "formController", eager = true)
 @ViewScoped
 
 public class FormController {
+	private OrdersBusinessService service;
 	@ManagedProperty(value = "#{user}")
 	public User user;
 	
@@ -87,5 +90,12 @@ public class FormController {
 				}
 			}
 		}
+	}
+	
+	public String onSendOrder(Order order) {
+		System.out.println("Send the Order");
+		service.sendOrder(order);
+		
+		return "OrderResponse.xhtml";
 	}
 }

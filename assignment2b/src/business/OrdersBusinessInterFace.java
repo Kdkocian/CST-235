@@ -13,4 +13,6 @@ public interface OrdersBusinessInterFace {
 	
 	public void setOrders(List<Order> orders);
 	
+	public void sendOrder(Order order);
+	
 }
