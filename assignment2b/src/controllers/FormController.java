@@ -1,5 +1,6 @@
 package controllers;
 
+import java.security.Principal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -30,14 +32,6 @@ public class FormController {
 	
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public String onSubmit(User user) {
-		FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("user", user);
-		getAllOrders();
-		insertOrder();
-		getAllOrders();
-		return "TestResponse.xhtml";
 	}
 	
 	public String onFlash(User user) {
@@ -97,5 +91,30 @@ public class FormController {
 		service.sendOrder(order);
 		
 		return "OrderResponse.xhtml";
+	}
+	
+	public String onLogoff() {
+		// Invalidate the Session to clear the security token
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			
+		// Redirect to a protected page (so we get a full HTTP Request) to get Login Page
+		return "TestResponse.xhtml?faces-redirect=true";
+
+	}
+	@PostConstruct
+	public void init() {
+		// Get the logged in Principle
+		Principal principle= FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
+			if(principle == null)
+			{
+				user.setFirstName("Unknown");
+				user.setLastName("");
+			}
+			else
+			{
+				user.setFirstName(principle.getName());
+				user.setLastName("");
+			}
+
 	}
 }
